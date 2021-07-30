@@ -1,9 +1,10 @@
 <template>
-  <h1>ADD A BOOK</h1>
-  <Form type="add" />
+  <h1>Update A BOOK</h1>
+  <Form type="update" />
 </template>
 
 <script>
+import { inject } from "vue";
 import Form from "../components/Form.vue";
 
 export default {

@@ -12,7 +12,7 @@
 import { computed } from "@vue/runtime-core";
 export default {
   props: {
-    book: String,
+    book: Object,
   },
   //
   setup(props) {

@@ -1,44 +1,46 @@
 <template>
-  <div class="book-detail">
+  <div v-if="book" class="book-detail">
     <h1>{{ book.title }}</h1>
 
     <p>{{ book.description }}</p>
-    <img :src="book.image || fallback" alt="" />
+    <img :src="book.image" />
     <div class="btn">
-      <button @click="deleteBook(book.id)">Delete This Book</button>
-      <button @click="updateBook">Update This Book</button>
+      <button @click="deleteBookInstance">Delete This Book</button>
+      <button @click="updateBookInstance">Update This Book</button>
     </div>
+  </div>
+  <div v-else>
+    Book Not Found
   </div>
 </template>
 
 <script>
 import { inject } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     // Get The id Of The Current Book
     const id = route.params.id;
     // Get All The Books From The Storage
     const allBooks = inject("allBooks").value;
-    const addBook = inject("addBook");
-    const updateBook = inject("updateBook");
     const deleteBook = inject("deleteBook");
 
     const book = allBooks.find((el) => el.id === id);
 
-    const fallback =
-      "https://images.freeimages.com/images/large-previews/fc8/very-old-books-1310025.jpg";
-
-    const updateBookInstance = () => {};
-
-    const deleteBookInstance = (bookid) => {
-      console.log("Deleted Book With id  : ", bookid);
-      deleteBook(bookid);
+    const updateBookInstance = () => {
+      router.push("/update/" + id);
     };
 
-    return { book, fallback, deleteBook, updateBook };
+    const deleteBookInstance = () => {
+      // re direct on delete
+      deleteBook(id);
+      router.push("/");
+    };
+
+    return { book, deleteBookInstance, updateBookInstance };
   },
 };
 </script>

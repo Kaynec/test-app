@@ -1,8 +1,11 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="allBooks.length > 0">
     <div class="book-container" v-for="book in allBooks" :key="book.id">
       <BookModal :book="book" />
     </div>
+  </div>
+  <div v-else>
+    <h1>No Books Found</h1>
   </div>
 </template>
 
@@ -36,5 +39,12 @@ export default {
 .book-container {
   max-width: 960px;
   margin: 0 auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+
+  .book {
+    margin: 1rem auto;
+    white-space: pre-wrap;
+  }
 }
 </style>
