@@ -12,25 +12,16 @@
 <script>
 import BookModal from "../components/BookModal.vue";
 
-import { inject } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "Home",
   components: { BookModal },
 
   setup() {
-    const allBooks = inject("allBooks");
-    const addBook = inject("addBook");
-    const updateBook = inject("updateBook");
-
-    const addBookOnClick = () => {
-      addBook({
-        title: "DUDE NIGGA",
-        image: "WHAT",
-      });
-    };
-
-    return { allBooks, addBookOnClick, updateBook };
+    const store = useStore();
+    const allBooks = store.state.allBooks;
+    return { allBooks };
   },
 };
 </script>
@@ -41,10 +32,5 @@ export default {
   margin: 0 auto;
   white-space: pre-wrap;
   word-break: break-all;
-
-  .book {
-    margin: 1rem auto;
-    white-space: pre-wrap;
-  }
 }
 </style>

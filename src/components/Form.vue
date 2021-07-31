@@ -26,7 +26,7 @@
 import { ref } from "@vue/reactivity";
 import { useRoute, useRouter } from "vue-router";
 import { v4 as uuid } from "uuid";
-import { inject } from "vue";
+import { useStore } from "vuex";
 
 export default {
   props: ["type"],
@@ -35,13 +35,14 @@ export default {
     const { type } = props;
     //   get id from route
     const route = useRoute();
+    const store = useStore();
+    // Get the id from params
+    const id = route.params.id;
     // Get The Values from Context
-    const addBook = inject("addBook");
-    const allBooks = inject("allBooks");
-    const updateBook = inject("updateBook");
+    const allBooks = store.state.allBooks;
     // in case of update
     const currentBook =
-      allBooks.value.find((book) => book.id === route.params.id) || {};
+      allBooks.find((book) => book.id === route.params.id) || {};
     //
     const title = ref(currentBook.title || "");
     const image = ref(currentBook.image || "");
@@ -52,30 +53,22 @@ export default {
     const router = useRouter();
     // suubmit and add a new book
     const onSubmit = () => {
-      if (!title) {
-        return errors.push("Title Can't Be Empty");
-      }
-      if (!description) {
-        return errors.push("Description can't be empty");
-      }
-      // in case of add form
-      const newBook = {
-        title,
+      if (!title) errors.push("Title Can't Be Empty");
+      if (!description) errors.push("Description can't be empty");
+      // The Book That's Being Created Or Updated
+      const book = {
+        title: title.value,
         image:
           image.length > 5
-            ? image
-            : "https://images.freeimages.com/images/large-previews/fc8/very-old-books-1310025.jpg",
-        // using a default fallback image for books
-        description,
+            ? image.value
+            : "https://s4.uupload.ir/files/book-1181637-640x480_hmrq.jpg", // using a default fallback image for books
+
+        description: description.value,
         id: currentBook.id || uuid(),
       };
       // if a book is being added
-      if (type == "add") {
-        addBook(newBook);
-      } else {
-        updateBook(route.params.id, newBook);
-        console.log(allBooks.value);
-      }
+      if (type == "add") store.commit("addBook", book);
+      else store.commit("updateBook", { id, updatedBook: book });
 
       router.push("/");
     };
@@ -85,11 +78,12 @@ export default {
 };
 </script>
 
+// Styles //
+
 <style lang="scss">
 form {
   display: flex;
-  width: 30%;
-  max-width: 1024px;
+  width: clamp(225px, 90vw, 650px);
   margin: 0 auto;
   flex-direction: column;
   border-radius: 10px;

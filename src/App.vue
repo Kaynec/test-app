@@ -1,18 +1,14 @@
 <template>
-  <ProvideUserSettings>
-    <div id="nav">
-      <router-link to="/"> ALL Books </router-link> |
-      <router-link to="/add">Add A Book</router-link>
-    </div>
-    <router-view />
-  </ProvideUserSettings>
+  <div id="nav">
+    <router-link to="/"> ALL Books </router-link> |
+    <router-link to="/add">Add A Book</router-link>
+  </div>
+  <router-view />
 </template>
 
 <script>
-import ProvideUserSettings from "./components/ProvideUserSettings";
-
 export default {
-  components: { ProvideUserSettings },
+  components: {},
   setup() {},
 };
 </script>

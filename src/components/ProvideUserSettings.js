@@ -1,56 +1,39 @@
-import { onDeactivated, onMounted, provide, ref, watch } from "vue";
-
 import { v4 as uuid } from "uuid";
-// using let so i can use local storage
-let allBooks = ref([
-  {
-    title: "Lord Of The Rings",
-    description:
-      "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore",
-    image:
-      "https://images.freeimages.com/images/large-previews/fc8/very-old-books-1310025.jpg",
-    id: uuid(),
-  },
-]);
+// persisting the state on refresh
+import createPersistedState from "vuex-persistedstate";
 
-export default {
-  setup() {
-    onMounted(() => {
-      const allBooksLocalStorage = JSON.parse(localStorage.getItem("allBooks"));
-      if (allBooksLocalStorage) {
-        allBooks.value = allBooksLocalStorage;
-      }
-    });
-    // passing all books to children components
+import { createStore } from "vuex";
 
-    const updateBook = (id, updatedBook) => {
-      allBooks.value = allBooks.value.map((book) => {
-        if (book.id === id) return updatedBook;
-        return book;
-      });
+// Create a new store instance.
+const store = createStore({
+  state() {
+    return {
+      allBooks: [
+        {
+          title: "Lord Of The Rings",
+          description:
+            "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore",
+          image: "https://s4.uupload.ir/files/book-1181637-640x480_hmrq.jpg",
+          id: uuid(),
+        },
+      ],
     };
-    const addBook = (newBook) =>
-      (allBooks.value = [...allBooks.value, newBook]);
-    const deleteBook = (id) =>
-      (allBooks.value = allBooks.value.filter((book) => book.id != id));
-
-    provide("allBooks", allBooks);
-    provide("updateBook", updateBook);
-    provide("addBook", addBook);
-    provide("deleteBook", deleteBook);
-    // watching for books and saving in local storage
-    const stopWatch = watch(allBooks, () => {
-      localStorage.setItem("allBooks", JSON.stringify(allBooks.value));
-    });
-    // cleaning the watch on click
-    onDeactivated(() => {
-      stopWatch();
-    });
   },
+  // plugins
+  plugins: [createPersistedState()],
+  //
+  mutations: {
+    updateBook: (state, payload) => {
+      const idx = state.allBooks.findIndex((book) => book.id == payload.id);
+      state.allBooks[idx] = payload.updatedBook;
+    },
 
-  render() {
-    // Our provider component is a render less component
-    // it does not render any markup of its own.
-    return this.$slots.default();
+    deleteBook: (state, id) => {
+      state.allBooks = state.allBooks.filter((book) => book.id != id);
+    },
+    addBook: (state, newBook) =>
+      (state.allBooks = [...state.allBooks, newBook]),
   },
-};
+});
+
+export default store;

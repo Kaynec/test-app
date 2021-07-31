@@ -4,7 +4,7 @@
       <router-link :to="{ path: '/' + book.id }">{{ book.title }}</router-link>
     </h3>
     <p>{{ shortDesc }}</p>
-    <img :src="book.image || fallback" />
+    <img :src="book.image" />
   </div>
 </template>
 
@@ -16,28 +16,26 @@ export default {
   },
   //
   setup(props) {
-    const fallback =
-      "https://images.freeimages.com/images/large-previews/fc8/very-old-books-1310025.jpg";
-
     const shortDesc = computed(() => {
       const { book } = props;
       return book.description.substr(0, 100) + "...";
     });
 
-    return { fallback, shortDesc };
+    return { shortDesc };
   },
 };
 </script>
 
 <style lang="scss">
 .book {
-  width: 50%;
-  margin: 0 auto;
+  width: clamp(220px, 90vw, 650px);
   background: crimson;
   transition: 0.4s;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
+  margin: 1rem auto;
+  white-space: pre-wrap;
 
   a {
     text-decoration: none;

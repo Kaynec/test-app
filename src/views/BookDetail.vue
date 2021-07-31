@@ -15,19 +15,18 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
     // Get The id Of The Current Book
     const id = route.params.id;
     // Get All The Books From The Storage
-    const allBooks = inject("allBooks").value;
-    const deleteBook = inject("deleteBook");
-
+    const allBooks = store.state.allBooks;
     const book = allBooks.find((el) => el.id === id);
 
     const updateBookInstance = () => {
@@ -36,7 +35,7 @@ export default {
 
     const deleteBookInstance = () => {
       // re direct on delete
-      deleteBook(id);
+      store.commit("deleteBook", id);
       router.push("/");
     };
 
