@@ -4,7 +4,7 @@
       <router-link :to="{ path: '/' + book.id }">{{ book.title }}</router-link>
     </h3>
     <p>{{ shortDesc }}</p>
-    <img :src="book.image" />
+    <img :src="book.image" alt="book image " />
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 <style lang="scss">
 .book {
   width: clamp(220px, 90vw, 650px);
-  background: crimson;
+  background: rgb(9, 0, 2);
   transition: 0.4s;
   display: flex;
   flex-direction: column;
@@ -38,20 +38,22 @@ export default {
   white-space: pre-wrap;
 
   a {
-    text-decoration: none;
-    color: rgb(255, 255, 255);
     transition: 0.4s;
-    padding: 1rem;
-    display: inline-block;
+    text-decoration: none;
+    color: white;
+    font-size: 2rem;
+    padding: 2rem 0;
+    display: block;
 
     &:hover {
-      transform: scale(1.1);
-      color: rgb(215, 196, 196);
+      cursor: pointer;
+      color: rgb(31, 128, 128);
+      transform: scale(1.05);
     }
   }
 
   p {
-    color: rgb(215, 204, 204);
+    color: rgb(255, 255, 255);
     padding: 1rem;
   }
 

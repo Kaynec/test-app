@@ -27,6 +27,9 @@ export default {
 *::after {
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+}
 
 #nav {
   padding: 30px;
@@ -34,9 +37,10 @@ export default {
   a {
     font-weight: bold;
     color: #2c3e50;
+    font-size: larger;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #068662;
     }
   }
 }
